@@ -1,0 +1,24 @@
+{
+  "name": "ol-proxy-file-cache",
+  "version": "0.1.1",
+  "description": "A remote interface for ol-proxy using mikeal/request",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --ui tdd --reporter spec"
+  },
+  "repository": "",
+  "keywords": [
+    "osm",
+    "map",
+    "proxy"
+  ],
+  "author": "connrs",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "~1.8.1"
+  },
+  "dependencies": {
+    "request": "~2.14.0",
+    "balancing-url": "~0.1.0"
+  }
+}

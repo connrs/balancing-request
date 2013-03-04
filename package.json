@@ -1,5 +1,5 @@
 {
-  "name": "ol-proxy-file-cache",
+  "name": "ol-proxy-request-remote",
   "version": "0.1.1",
   "description": "A remote interface for ol-proxy using mikeal/request",
   "main": "index.js",

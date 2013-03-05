@@ -19,4 +19,8 @@ OLProxyRequestRemote.prototype.setRouteType = function (RouteType) {
   this._balancingUrl.setRouteType(RouteType);
 };
 
+OLProxyRequestRemote.prototype.isValidRoute = function (path) {
+  return typeof this._balancingUrl.generateUrl(path) !== 'undefined';
+};
+
 module.exports = OLProxyRequestRemote;

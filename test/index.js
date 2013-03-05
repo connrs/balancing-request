@@ -58,6 +58,40 @@ suite('OL Proxy Request Remote', function () {
     assert.equal(BalancingUrlMock.routeTypes, OLProxyRequestRemote.routeTypes);
   });
 
+  test('Valid route passed to isValidRoute', function () {
+    var routes = [
+          { match: '/valid_route', urls: [ 'http://example.com' ] }
+        ],
+        path = '/valid_route/path.jpg';
+
+    BalancingUrlMock.prototype.setRoutes = function () {};
+    BalancingUrlMock.prototype.setRouteType = function () {};
+    BalancingUrlMock.prototype.generateUrl = function (path) {
+      return !!path.match(routes[0].match);
+    };
+    remote = new OLProxyRequestRemote();
+    remote.setRoutes(routes);
+    assert.ok(remote.isValidRoute(path));
+  });
+
+  test('Invalid route passed to isValidRoute', function () {
+    var routes = [
+          { match: '/valid_route', urls: [ 'http://example.com' ] }
+        ],
+        path = '/invalid_route/path.jpg';
+
+    BalancingUrlMock.prototype.setRoutes = function () {};
+    BalancingUrlMock.prototype.setRouteType = function () {};
+    BalancingUrlMock.prototype.generateUrl = function (path) {
+      if (!!path.match(routes[0].match)) {
+        return routes[0].urls[0] + path;
+      }
+    };
+    remote = new OLProxyRequestRemote();
+    remote.setRoutes(routes);
+    assert.ok(!remote.isValidRoute(path));
+  });
+
   test('Selects a URL using a custom Route Type.', function (done) {
     var urls = ['http://example.com', 'http://example.net'],
         path = '/path.jpg',

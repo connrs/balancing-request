@@ -1,6 +1,6 @@
 {
   "name": "ol-proxy-request-remote",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A remote interface for ol-proxy using mikeal/request",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "request": "~2.14.0",
-    "balancing-url": "~0.1.0"
+    "balancing-url": "~0.1.1"
   }
 }

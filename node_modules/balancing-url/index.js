@@ -15,10 +15,6 @@ BalancingUrl.prototype._routes = undefined;
 BalancingUrl.prototype._routesRegex = undefined;
 BalancingUrl.prototype._routeType = BalancingUrl.routeTypes.RANDOM;
 
-BalancingUrl.prototype.setRoute = function (url) {
-  this.setRoutes(url);
-};
-
 BalancingUrl.prototype.setRoutes = function (routes) {
   if (this._isString(routes)) {
     this._setRoutePath('', [routes]);
@@ -113,4 +109,14 @@ BalancingUrl.prototype._stripRoutePathFromRequestUri = function (routePath, requ
 return requestUri.match(this._routesRegex[routePath])[2];
 };
 
-module.exports = BalancingUrl;
+function balancingUrl(routes, routeType) {
+  var url = new BalancingUrl();
+  if (typeof routeType !== 'undefined') {
+    url.setRouteType(routeType);
+  }
+  url.setRoutes(routes);
+  return url.generateUrl.bind(url);
+}
+balancingUrl.routeTypes = BalancingUrl.routeTypes;
+
+module.exports = balancingUrl;

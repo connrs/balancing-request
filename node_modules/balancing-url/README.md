@@ -6,7 +6,13 @@ When instantiating the class, you may pass either a single string with a domain 
 
 You may specify the randomisation process for the URLs by defining which route type that the class should use like so:
 
-    var url = new BalancingUrl();
-    url.setRouteType(BalancingUrl.routeTypes.RANDOM);
+    var balancingUrl = require('balancing-url');
+    var routes = [
+      'http://example.com',
+      'http://example.org'
+    ];
+    var generateUrl = balancingUrl(routes, balancingUrl.routeTypes.RANDOM);
+
+    console.log(generateUrl('/here'));
 
 Available route types include: `BalancingUrl.routeTypes.RANDOM` and `BalancingUrl.routeTypes.ROUND_ROBIN`. Alternatively, you may create your own route type interface. Simply ensure that the public interface of the object matches the interface of the route type objects included in this module. Use the route type tests for further assistance.

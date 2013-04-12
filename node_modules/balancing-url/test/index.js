@@ -5,7 +5,7 @@ var assert = require('assert'),
     path = require('path');
 
 suite('Random Route Urls', function () {
-  var BalancingUrl = require('../index.js'),
+  var balancingUrl = require('../index.js'),
       oldMathRandom;
 
   function mockMathRandom(size) {
@@ -19,15 +19,6 @@ suite('Random Route Urls', function () {
     Math.random = oldMathRandom;
   }
 
-  test('Combines a complete Url with only 1 route set', function () {
-    var path = '/example_path',
-        url = 'http://example.com',
-        balancingUrl = new BalancingUrl();
-
-    balancingUrl.setRoute(url);
-    assert.equal(balancingUrl.generateUrl(path), url + path);
-  });
-
   test('Builds a Url picking a random route', function () {
     var path = '/example_path',
         urls = [
@@ -35,11 +26,10 @@ suite('Random Route Urls', function () {
           'http://example.org',
           'http://example.net'
         ],
-        balancingUrl = new BalancingUrl();
+        generateUrl = balancingUrl(urls);
 
-    balancingUrl.setRoutes(urls);
     mockMathRandom(1/3);
-    assert.equal(balancingUrl.generateUrl(path), urls[1] + path);
+    assert.equal(generateUrl(path), urls[1] + path);
     restoreMathRandom();
   });
 
@@ -51,13 +41,11 @@ suite('Random Route Urls', function () {
           'http://example.org',
           'http://example.net'
         ],
-        balancingUrl = new BalancingUrl();
+        generateUrl = balancingUrl(urls, balancingUrl.routeTypes.ROUND_ROBIN);
 
-    balancingUrl.setRouteType(BalancingUrl.routeTypes.ROUND_ROBIN);
-    balancingUrl.setRoutes(urls);
     for (i = 0; i < urls.length * 2; i++) {
       j = i % 3;
-      assert.equal(balancingUrl.generateUrl(path), urls[j] + path);
+      assert.equal(generateUrl(path), urls[j] + path);
     }
   });
 
@@ -76,11 +64,10 @@ suite('Random Route Urls', function () {
             urls: [ 'http://example.net' ]
           }
         ],
-        balancingUrl = new BalancingUrl();
+        generateUrl = balancingUrl(routes);
 
-    balancingUrl.setRoutes(routes);
-    assert.equal(balancingUrl.generateUrl(path1), url1);
-    assert.equal(balancingUrl.generateUrl(path2), url2);
+    assert.equal(generateUrl(path1), url1);
+    assert.equal(generateUrl(path2), url2);
   });
 
   test('Strips the trailing slash from a route match', function () {
@@ -92,10 +79,9 @@ suite('Random Route Urls', function () {
             urls: [ 'http://example.com' ]
           }
         ],
-        balancingUrl = new BalancingUrl();
+        generateUrl = balancingUrl(routes);
 
-    balancingUrl.setRoutes(routes);
-    assert.equal(balancingUrl.generateUrl(path), url + path);
+    assert.equal(generateUrl(path), url + path);
   });
 
   test('Strips the trailing slash from route urls', function () {
@@ -107,10 +93,9 @@ suite('Random Route Urls', function () {
             urls: [ 'http://example.com/' ]
           }
         ],
-        balancingUrl = new BalancingUrl();
+        generateUrl = balancingUrl(routes);
 
-    balancingUrl.setRoutes(routes);
-    assert.equal(balancingUrl.generateUrl(path), url + path);
+    assert.equal(generateUrl(path), url + path);
   });
 
   test('Returns undefined when no route matches', function () {
@@ -122,9 +107,8 @@ suite('Random Route Urls', function () {
             urls: [ url ]
           }
         ],
-        balancingUrl = new BalancingUrl();
+        generateUrl = balancingUrl(routes);
 
-    balancingUrl.setRoutes(routes);
-    assert.equal(balancingUrl.generateUrl(path), undefined);
+    assert.equal(generateUrl(path), undefined);
   });
 });

@@ -1,16 +1,16 @@
 var request = require('request');
 var balancingUrl = require('balancing-url');
 
-function OLProxyRequestRemote() {
+function BalancingRequest() {
   this._routeType = undefined;
   this._generateUrl = undefined;
 }
 
-OLProxyRequestRemote.prototype.setRoutes = function (routes) {
+BalancingRequest.prototype.setRoutes = function (routes) {
   this._generateUrl = balancingUrl(routes, this._routeType);
 };
 
-OLProxyRequestRemote.prototype.remoteStream = function (path) {
+BalancingRequest.prototype.remoteStream = function (path) {
   var url = this._generateUrl(path);
 
   if (url === undefined) {
@@ -20,12 +20,12 @@ OLProxyRequestRemote.prototype.remoteStream = function (path) {
   return request(this._generateUrl(path));
 };
 
-OLProxyRequestRemote.prototype.setRouteType = function (RouteType) {
+BalancingRequest.prototype.setRouteType = function (RouteType) {
   this._routeType = RouteType;
 };
 
-function olProxyRequestRemote(routes, RouteType) {
-  var remote = new OLProxyRequestRemote();
+function balancingRequest(routes, RouteType) {
+  var remote = new BalancingRequest();
 
   if (typeof RouteType !== 'undefined') {
     remote.setRouteType(RouteType);
@@ -34,6 +34,6 @@ function olProxyRequestRemote(routes, RouteType) {
   remote.setRoutes(routes);
   return remote.remoteStream.bind(remote);
 }
-olProxyRequestRemote.routeTypes = balancingUrl.routeTypes;
+balancingRequest.routeTypes = balancingUrl.routeTypes;
 
-module.exports = olProxyRequestRemote;
+module.exports = balancingRequest;

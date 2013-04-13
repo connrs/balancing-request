@@ -9,8 +9,8 @@ var requestMock = function (path) {
 
 require.cache[path.resolve(__dirname, '../node_modules/request/main.js')] = { exports: requestMock };
 
-suite('OL Proxy Request Remote', function () {
-  var olProxyRequestRemote = require('../index.js');
+suite('Balancing Request', function () {
+  var balancingRequest = require('../index.js');
   var remoteStream;
 
   test('Returns a stream with only a single route set.', function (done) {
@@ -22,7 +22,7 @@ suite('OL Proxy Request Remote', function () {
       done();
     };
 
-    remoteStream = olProxyRequestRemote(url);
+    remoteStream = balancingRequest(url);
     remoteStream(path);
   });
 
@@ -35,7 +35,7 @@ suite('OL Proxy Request Remote', function () {
       done();
     };
 
-    remoteStream = olProxyRequestRemote(urls);
+    remoteStream = balancingRequest(urls);
     remoteStream(path);
   });
 
@@ -45,7 +45,7 @@ suite('OL Proxy Request Remote', function () {
         ];
     var path = '/invalid_route/path.jpg';
 
-    remoteStream = olProxyRequestRemote(routes);
+    remoteStream = balancingRequest(routes);
     assert.equal(undefined, remoteStream(path));
   });
 
@@ -66,7 +66,7 @@ suite('OL Proxy Request Remote', function () {
       done();
     };
 
-    remoteStream = olProxyRequestRemote(urls, RouteTypeMock);
+    remoteStream = balancingRequest(urls, RouteTypeMock);
     remoteStream(path);
   });
 });

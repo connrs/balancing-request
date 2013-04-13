@@ -106,14 +106,16 @@ BalancingUrl.prototype._routePathMatchesRequestUri = function (routePath, reques
 };
 
 BalancingUrl.prototype._stripRoutePathFromRequestUri = function (routePath, requestUri) {
-return requestUri.match(this._routesRegex[routePath])[2];
+  return requestUri.match(this._routesRegex[routePath])[2];
 };
 
 function balancingUrl(routes, routeType) {
   var url = new BalancingUrl();
+
   if (typeof routeType !== 'undefined') {
     url.setRouteType(routeType);
   }
+
   url.setRoutes(routes);
   return url.generateUrl.bind(url);
 }
